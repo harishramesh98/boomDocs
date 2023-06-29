@@ -232,7 +232,7 @@ Note!! *ALWAYS ENSURE THAT YOU UNMOUNT THE SD CARD BEFORE REMOVING IT FROM THE C
 If you find that the file system is not formatted correctly, run the following on another device before re-inserting into the FPGA.
 
 ```
-mkfs ...
+sudo mkfs.hfs -v "Prototype Data" /dev/mmcblk1p2
 ```
 
 ## Booting the FPGA
