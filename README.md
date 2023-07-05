@@ -233,7 +233,7 @@ Note!! *ALWAYS ENSURE THAT YOU UNMOUNT THE SD CARD BEFORE REMOVING IT FROM THE C
 
 If you find that the file system is not formatted correctly, try running the `mkfs.hfs` command again.
 
-If the file system is read-only:
+If you lack permissions for the file system:
 1. See that `user` is in the `disk` group
 2. Use `sudo` to copy/move/create files and directories into the file system
 
