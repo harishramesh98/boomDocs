@@ -231,11 +231,11 @@ Note!! *ALWAYS ENSURE THAT YOU UNMOUNT THE SD CARD BEFORE REMOVING IT FROM THE C
 
 ### Troubleshooting
 
-If you find that the file system is not formatted correctly, run the following on another device before re-inserting into the FPGA.
+If you find that the file system is not formatted correctly, try running the `mkfs.hfs` command again.
 
-```
-sudo mkfs.hfs -v "Prototype Data" /dev/mmcblk1p2
-```
+If the file system is read-only:
+1. See that `user` is in the `disk` group
+2. Use `sudo` to copy/move/create files and directories into the file system
 
 ## Booting the FPGA
 
@@ -305,7 +305,7 @@ marshal launch ./example-workloads/example-fed.json
 
 ### Troubleshooting
 
-If you get an error, try removing the runOutput. 
+If you get an error, try removing the runOutput with
 
 ```
 lsof +D /runOutput
