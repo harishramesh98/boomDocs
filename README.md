@@ -62,7 +62,7 @@ Now, we need to build the RISCV toolchain. This will take a while.
 
 ## Scripts
 
-Your .bashrc file should look like the file bashrc4acggrid in this repository. Copy the contents of that file into your .bashrc file. Note that the conda setup should be done by the miniforge installer script.
+Your `.bashrc` file should look like the file `bashrc4acggrid` in this repository. Copy the contents of that file into your .bashrc file. Note that the conda setup should be done by the miniforge installer script.
 
 Use the boom alias to setup the environment for the chipyard project. This will activate the conda environment and setup the path variables. Please change the command to the correct path to your chipyard directory.
 
@@ -174,6 +174,8 @@ The last step to generate the proper binary is to flatten it. This is done by us
 ``` 
 sudo gdisk /dev/sdX # where X is the letter of the SD card
 ```
+
+If you don't know which letter to use, you can run `lsblk` to check.
 
 Press x to get the expert menu, then press z to zap everything. This will delete all the partitions on the SD card. Press y to all prompts.
 
@@ -310,6 +312,16 @@ lsof +D /runOutput
 ```
 
 If a pid is found, kill it.
+
+If you find that you don't have enough space for QEMU, navigate to `./images/firechip/example-fed`. The image is `example-fed.img` and its default size is about 2GB. You can resize it with
+
+```
+dd if=/dev/zero of=example-fed.img seek=N obs=1MB count=0
+```
+
+where `N` is the size you wish to resize to and `obs` is the unit for N (e.g. `N=30 obs=1GB` resizes to 30GB). 
+
+To fit QEMU to the new image size, log into the VM and run `parted` and follow the prompts to resize the file system (format ext4). Afterwards, run `resize2fs /dev/vda` and restart the VM.
 
 ## Config Files
 
