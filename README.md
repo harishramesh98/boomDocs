@@ -363,3 +363,16 @@ Note: This toolchain will compile for a 64 bit RISC-V processor. It is fine as B
 
 ## Compiling the RISC-V Toolchain
 
+...
+
+## Using golang
+
+Go is statically compiled and can be run with BOOM.
+
+You'll need to use QEMU to compile into RISC-V. To install go, you'll need to [cross-compile](https://go.dev/doc/install/source#bootstrapFromCrosscompiledSource) for RISC-V and Linux. You can do this as follows:
+1. Install go on your local machine first to do this. You can acceess the downloads and instructions [here](https://go.dev/doc/install).
+2. Follow the path to your go installation (`/usr/local/go` on my Mac) and run `cd src`.
+3. Run `GOOS=linux GOARCH=riscv64 ./bootstrap.bash`. This will generate a cross-compiled toolchain in `../../go-linux-riscv64-bootstrap` and a compressed archive.
+4. Copy the archive over to QEMU and extract the files. Wherever you have the directory, set `GOROOT_BOOTSTRAP` to that path. You may need to also set export `GOROOT` to that same path and update your path variable via `export PATH=$PATH:$GOROOT/bin`.
+5. Verify your installation with `go version`.
+
