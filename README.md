@@ -34,11 +34,11 @@ Follow the instructions and make sure to say yes to the prompts in the installer
 Run the following command to make sure conda is installed correctly:
 
 ```
-conda install -n base conda-lock
+conda install -n base conda-lock=1.4.0
 
 conda activate base
 ```
-
+Make sure that it is version 1.4.0. The newer versions of conda-lock throw errors while setting the chipyard up.
 Restart your terminal, you should see (base) next to your peompt.
 
 ## Cloning Chipyard
