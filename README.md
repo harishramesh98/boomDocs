@@ -197,7 +197,7 @@ Press o to create a new empty GUID partition table (GPT). This will create a new
 - Press 1 to create the first partition
 - Press enter to select the default first sector (should be 34)
 - Put +1048576 as the size of the partition. This is the size of the boot partition in sectors. This is 512MB. Note it should be larger than the size of the linux binary.
-- For the type, search for the APFS type and use the hex number given.
+- For the type, search for the APFS type and use the hex number given. If you don't see the APFS option, we've found that Apple UFS works as well.
 
 4. Now we need to create the root partition. This is done by running the following command:
 
