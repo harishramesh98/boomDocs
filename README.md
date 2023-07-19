@@ -1,7 +1,7 @@
 # BOOM Docs
-Documentation for Boom Research in UPenn ACG Group
+Documentation for BOOM Research in UPenn ACG Group
 
-Welcome to Boom Docs! 
+Welcome to BOOM Docs! 
 
 ## Inportant Links
 - [Chipyard Github](https://github.com/ucb-bar/chipyard)  
@@ -99,7 +99,7 @@ Once the file is open, add the following lines to the end of the file:
 
 Save the file and restart your terminal. Run the ulimit commands again to make sure the ulimit is set correctly.
 
-## Building the Boom Core
+## Building the BOOM Core
 
 First we need to source the FPGA init script. This will set up the environment variables for the FPGA tools. 
 
@@ -107,7 +107,7 @@ First we need to source the FPGA init script. This will set up the environment v
 ./scripts/init-fpga.sh
 ```
 
-Now we can build the boom core. This will take a while.
+Now we can build the BOOM core. This will take a while.
 
 ```
 cd fpga/
@@ -134,9 +134,9 @@ Now, we need to add the bitstream to the FPGA. Click on "Program Device". Select
 
 The FPGA should now be programmed.
 
-## Building the Linux Binary
+## Building the Linux Binary for BOOM
 
-This is a complicated process. First we need to make the linux binary. This will take a while.
+This is a complicated process. First we need to make the Linux binary. This will take a while.
 
 We need to go to the firemarshal directory. 
 
@@ -154,7 +154,7 @@ echo "board-dir : 'boards/prototype'" >> $PATH_TO_FIREMARSHAL/marshal-config.yam
 
 Note: `$PATH_TO_FIREMARSHAL` is the path to the firemarshal directory and is not an already set environment variable.
 
-Now we need to build the linux binary.
+Now we need to build the Linux binary.
 
 ```
 ./marshal -v -d build br-base.json # here the -d indicates --nodisk or initramfs
@@ -168,6 +168,12 @@ The last step to generate the proper binary is to flatten it. This is done by us
 
 
 ## Setting up the SD Card
+
+### Setup Script
+
+You can find a setup script [here](https://github.com/audrey-yang/boomDocs/blob/main/sd-setup.sh). It assumes that the SD card is located at `/dev/sdb` but can be changed.
+
+### Step-by-step
 
 1. We need to clean the SD card. This is done by running the following command:
 
@@ -281,7 +287,9 @@ umount /dev/mmcblk0p2
 
 ## Using QEMU
 
-QEMU is a virtual machine. It allows us to run RISC-V Linux on our computer. We can use QEMU to run the Linux binary that we generated earlier. This is useful because it allows us to test the Linux binary without having to program the FPGA everytime. It also comes bundles with the chipyard toolchain.
+QEMU is a virtual machine. It allows us to run RISC-V Linux on our computer. We can use QEMU to run the Linux binary that we generated earlier. This is useful because it allows us to test the Linux binary without having to program the FPGA everytime. It also comes bundled with the chipyard toolchain.
+
+### QEMU Through FireMarshal
 
 Head over to the firesim directory.
 
@@ -303,7 +311,7 @@ Run the following command to run the binary binary in QEMU.
 marshal launch ./example-workloads/example-fed.json
 ```
 
-### Troubleshooting
+#### Troubleshooting
 
 If you get an error, try removing the runOutput with
 
@@ -322,6 +330,20 @@ dd if=/dev/zero of=example-fed.img seek=N obs=1MB count=0
 where `N` is the size you wish to resize to and `obs` is the unit for N (e.g. `N=30 obs=1GB` resizes to 30GB). 
 
 To fit QEMU to the new image size, log into the VM and run `parted` and follow the prompts to resize the file system (format ext4). Afterwards, run `resize2fs /dev/vda` and restart the VM.
+
+### QEMU Through `qemu-system-riscv64`
+
+It's easy to use QEMU through FireMarshal, but it does not have much flexibility. In the version we're using, Fedora is set to version 33. However, we may want to use a different version for `glibc` compatability with the binary for BOOM. You can set up Fedora 31 as follows:
+
+- Download (or `wget`) `Fedora-Developer-Rawhide-20190703.n.0-sda.raw.xz` and `fw_payload-uboot-qemu-virt-smode.elf` from [the Fedora project](https://dl.fedoraproject.org/pub/alt/risc-v/disk-images/fedora/rawhide/20190703.n.0/Developer/). These will serve as the image and kernel, respectively.
+- Place the files into a new directory at `$PATH_TO_FIRESIM`
+- Run the following to boot the image with QEMU (replacing path names)
+  ```
+  ./init-submodules.sh
+  /path/to/chipyard/.conda-env/bin/qemu-system-riscv64 -nographic -bios none -smp 4 -machine virt -m 16384 -kernel /path/to/fw_payload-uboot-qemu-virt-smode.elf -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-device,rng=rng0 -device virtio-net-device,netdev=usernet -netdev user,id=usernet,hostfwd=tcp::41893-:22 -device virtio-blk-device,drive=hd0 -drive file=/path/to/Fedora-Developer-Rawhide-20190703.n.0-sda.raw,format=raw,id=hd0 
+  ```
+
+  You can use the same methods for different versions of Fedora and more.
 
 ## Config Files
 
@@ -365,7 +387,7 @@ Note: This toolchain will compile for a 64 bit RISC-V processor. It is fine as B
 
 ...
 
-## Using golang
+## Using Go
 
 Go is statically compiled and can be run with BOOM.
 
