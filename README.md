@@ -10,7 +10,7 @@ Welcome to BOOM Docs!
 - [Boom Website](https://boom-core.org/)
 - [Boom Github](https://github.com/riscv-boom/riscv-boom)
 - [Boom Docs](https://docs.boom-core.org/en/latest/)
-
+- [RISCV Code Constructor - for reference](https://github.com/abejgonzalez/riscv-code-constructor.git)
 
 ## Installing Conda
 Conda is a package manager that will allow us to install all the necessary packages for our project.
@@ -397,4 +397,10 @@ You'll need to use QEMU to compile into RISC-V. To install go, you'll need to [c
 3. Run `GOOS=linux GOARCH=riscv64 ./bootstrap.bash`. This will generate a cross-compiled toolchain in `../../go-linux-riscv64-bootstrap` and a compressed archive.
 4. Copy the archive over to QEMU and extract the files. Wherever you have the directory, set `GOROOT_BOOTSTRAP` to that path. You may need to also set export `GOROOT` to that same path and update your path variable via `export PATH=$PATH:$GOROOT/bin`.
 5. Verify your installation with `go version`.
+
+## Preliminary performance counter monitoring and RISCV-CODE-Constructor
+Once you set up the older version of QEMU running in the chipyard, we can experiment with the riscv-code-constructor. The constructor requires a working chipyard directory. After executing "source ./env.sh" we can use the code constructor to generate riscv executables. The code constructor uses a scoped or modifies version of GLIBC that does not have all the functionality of gcc or glibc. It uses a riscv based elf compiler to compile programs and generate executables for BOOM or Rocket-chip running baremetal programs. This does not suit our purpose. However, the programming syle mentioned in the code-constructor helps in figuring out how to enable certain performance counters on BOOM. Firstly, at the time of writing we have difficulty accessing machine-level registers. We can access cycle and instret registers with comparative ease. Compiling this code from the code constructor in the QEMU machine can be done using gcc on QEMU.
+It is useful to occassionally disassemble code and view the assembly code to make sense of what happens behind the scenes.
+Use:
+objdump -D <Executable> > <executable>.txt
 
