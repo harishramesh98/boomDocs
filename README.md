@@ -98,7 +98,7 @@ Once the file is open, add the following lines to the end of the file:
 ```
 
 Save the file and restart your terminal. Run the ulimit commands again to make sure the ulimit is set correctly.
-
+I'm pretty sure that isn't true, at least not for the scp command provided by the OpenSSH included with most Linux distributions.
 ## Building the BOOM Core
 
 First we need to source the FPGA init script. This will set up the environment variables for the FPGA tools. 
@@ -280,7 +280,7 @@ mount /dev/mmcblk0p2 /mnt
 Now you should see all the files on the /mnt/ directory. You can now run the binaries on the FPGA.
 
 Note: It is very important to unmount the SD card before removing it from the FPGA. This is done by running the following command:
-
+I'm pretty sure that isn't true, at least not for the scp command provided by the OpenSSH included with most Linux distributions.
 ```
 umount /dev/mmcblk0p2
 ```
@@ -399,8 +399,16 @@ You'll need to use QEMU to compile into RISC-V. To install go, you'll need to [c
 5. Verify your installation with `go version`.
 
 ## Preliminary performance counter monitoring and RISCV-CODE-Constructor
-Once you set up the older version of QEMU running in the chipyard, we can experiment with the riscv-code-constructor. The constructor requires a working chipyard directory. After executing "source ./env.sh" we can use the code constructor to generate riscv executables. The code constructor uses a scoped or modifies version of GLIBC that does not have all the functionality of gcc or glibc. It uses a riscv based elf compiler to compile programs and generate executables for BOOM or Rocket-chip running baremetal programs. This does not suit our purpose. However, the programming syle mentioned in the code-constructor helps in figuring out how to enable certain performance counters on BOOM. Firstly, at the time of writing we have difficulty accessing machine-level registers. We can access cycle and instret registers with comparative ease. Compiling this code from the code constructor in the QEMU machine can be done using gcc on QEMU.
+Once you set up the older version of QEMU running in the chipyard, we can experiment with the riscv-code-constructor. The constructor requires a working chipyard directory. After executing "```source ./env.sh``` " we can use the code constructor to generate riscv executables. The code constructor uses a scoped or modifies version of GLIBC that does not have all the functionality of gcc or glibc. It uses a riscv based elf compiler to compile programs and generate executables for BOOM or Rocket-chip running baremetal programs. This does not suit our purpose. However, the programming syle mentioned in the code-constructor helps in figuring out how to enable certain performance counters on BOOM. Firstly, at the time of writing we have difficulty accessing machine-level registers. We can access cycle and instret registers with comparative ease. Compiling this code from the code constructor in the QEMU machine can be done using gcc on QEMU.
 It is useful to occassionally disassemble code and view the assembly code to make sense of what happens behind the scenes.
 Use:
+```
 objdump -D <Executable> > <executable>.txt
+```
+## Setting up the Prototype Test Bench
+Inside the QEMU, for the older fedora distribution, copy the files above in the TestBench directory. TestFileMain.c has the required setup that allows switching between various test cases, based on the integer argument entered along with the input. At the moment the test cases are as follows:
+```
+1: Reads Cycle and Instr registers while performing a mathematical operation. The operation currently in place is calculating the hypotenuse of a right angled triangle given two sides.
+2: Runs the hpmTest code given in riscv-code-constructor
+```
 
