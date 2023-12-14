@@ -9,6 +9,7 @@ void testCase1();
 void testCase2();
 void testCase3();
 void testCase4();
+void testCase5();
 
 int main(int argc, char **argv){
 	if(argc>1){
@@ -21,6 +22,8 @@ int main(int argc, char **argv){
 				break;
 		        case 4: testCase4();
 			        break;
+			case 5: testCase5();
+					break;
 		default: printf("test case undefined\n");
 				break;
 		}
@@ -147,5 +150,17 @@ void testCase4(void){
 		printf("%lu = %lu - %lu\n", end_hpm4 - start_hpm4, end_hpm4, start_hpm4);
 		return;
 		}
+
+void testCase5(void){
+	printf("Testing reading mcounteren and scounteren\n");
+	uint64_t mcounteren_val,scounteren_val;
+	mcounteren_val = read_csr(mcounteren);
+	printf("mcounteren = %lu\n",mcounteren_val);
+
+	scounteren_val = read_csr(scounteren);
+	printf("scounteren = %lu\n",scounteren_val);
+	return;
+}
+
 
 
